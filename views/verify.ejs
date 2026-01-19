@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header') %>
+
+<body class="bg-light">
+  <%- include('../includes/navbar') %>
+
+  <!-- Full width verification section -->
+  <div class="container-fluid px-3 px-md-5 py-5">
+
+    <!-- Title -->
+    <div class="text-center mb-4">
+      <h2 class="fw-semibold text-success mb-1">
+        <i class="fa-solid fa-envelope-circle-check me-1"></i> Email Verification
+      </h2>
+      <p class="text-muted small fst-italic mb-0">
+        Enter the 4-digit code sent to your email
+      </p>
+    </div>
+
+    <!-- Error -->
+    <% if (error) { %>
+      <div
+        id="verifyError"
+        class="alert alert-danger alert-dismissible fade show text-center fw-semibold mx-auto"
+        style="max-width: 720px;"
+        role="alert"
+      >
+        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+        <%= error %>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    <% } %>
+
+    <!-- Verification Form -->
+    <form
+      action="/admin/verify-otp"
+      method="post"
+      class="mx-auto"
+      style="max-width: 720px;"
+    >
+
+      <!-- Hidden Email -->
+      <input type="hidden" name="email" value="<%= email %>">
+
+      <!-- OTP -->
+      <div class="mb-4">
+        <label for="otp" class="form-label fw-medium">
+          <i class="fa-solid fa-shield-halved me-1 text-success"></i> Verification Code
+        </label>
+        <input
+          type="text"
+          class="form-control shadow-none text-center fs-5 fw-semibold"
+          id="otp"
+          name="otp"
+          placeholder="Enter 4-digit OTP"
+          maxlength="4"
+          pattern="[0-9]{4}"
+          required
+        >
+        <div class="form-text text-muted">
+          Code expires in 5 minutes
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex justify-content-between align-items-center">
+        <button type="submit" class="btn btn-success px-4">
+          Verify
+        </button>
+
+        <a
+          href="/admin/signup"
+          class="text-decoration-none small fw-medium text-primary"
+        >
+          Change email?
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+  <%- include('../includes/footer') %>
+
+  <script>
+    setTimeout(() => {
+      const alert = document.getElementById('verifyError');
+      if (alert) {
+        alert.classList.remove('show');
+        alert.classList.add('hide');
+        setTimeout(() => alert.remove(), 300);
+      }
+    }, 3000);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header') %>
+
+<body class="bg-light">
+  <%- include('../includes/navbar') %>
+
+  <!-- Full width signup section -->
+  <div class="container-fluid px-3 px-md-5 py-5">
+
+    <!-- Title -->
+    <div class="text-center mb-4">
+      <h2 class="fw-semibold text-success mb-1">
+        <i class="fa-solid fa-user-secret me-1"></i> Admin Signup
+      </h2>
+      <p class="text-muted small fst-italic mb-0">
+        Create an administrator account
+      </p>
+    </div>
+
+    <!-- Error -->
+    <% if (error) { %>
+      <div
+        id="loginError"
+        class="alert alert-danger alert-dismissible fade show text-center fw-semibold mx-auto"
+        style="max-width: 720px;"
+        role="alert"
+      >
+        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+        <%= error %>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    <% } %>
+
+    <!-- Form (FULL WIDTH) -->
+    <form
+      action="/admin/signup"
+      method="post"
+      class="mx-auto"
+      style="max-width: 720px;"
+    >
+
+      <!-- Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label fw-medium">
+          <i class="fa-solid fa-circle-user me-1 text-success"></i> Name
+        </label>
+        <input
+          type="text"
+          class="form-control shadow-none"
+          id="name"
+          name="name"
+          placeholder="Admin name"
+          required
+        >
+      </div>
+
+      <!-- Email & Phone -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="email" class="form-label fw-medium">
+            <i class="fa-solid fa-envelope me-1 text-success"></i> Email
+          </label>
+          <input
+            type="email"
+            class="form-control shadow-none"
+            id="email"
+            name="email"
+            placeholder="admin@example.com"
+            required
+          >
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="phone_no" class="form-label fw-medium">
+            <i class="fa-solid fa-phone me-1 text-success"></i> Phone No
+          </label>
+          <input
+            type="number"
+            class="form-control shadow-none"
+            id="phone_no"
+            name="phone_no"
+            placeholder="9876543210"
+            required
+          >
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4">
+        <label for="password" class="form-label fw-medium">
+          <i class="fa-solid fa-key me-1 text-success"></i> Password
+        </label>
+        <input
+          type="password"
+          class="form-control shadow-none"
+          id="password"
+          name="password"
+          placeholder="Create a strong password"
+          required
+        >
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex justify-content-between align-items-center">
+        <button type="submit" class="btn btn-success px-4">
+          Submit
+        </button>
+
+        <a
+          href="/admin/login"
+          class="text-decoration-none small fw-medium text-primary"
+        >
+          Login to existing account?
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+  <%- include('../includes/footer') %>
+
+  <script>
+    setTimeout(() => {
+      const alert = document.getElementById('loginError');
+      if (alert) {
+        alert.classList.remove('show');
+        alert.classList.add('hide');
+        setTimeout(() => alert.remove(), 300);
+      }
+    }, 3000);
+  </script>
+
+</body>
+</html>

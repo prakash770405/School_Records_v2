@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header') %>
+
+    <body class="bg-light">
+        <%- include('../includes/navbar') %>
+
+            <div class="container my-3">
+
+                <!-- Page Header -->
+                <div class="mb-4">
+                    <h2 class="h3 fw-semibold text-success mb-1">
+                        <i class="fa-solid fa-user-pen me-1"></i> Edit Student Details
+                    </h2>
+                    <p class="text-muted fst-italic mb-0">
+                        Modify student information carefully and save changes
+                    </p>
+                </div>
+
+                <!-- Form -->
+                <form action="/form/<%= std._id %>/edit?_method=PUT" method="post" enctype="multipart/form-data">
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="Name" class="form-label fw-medium">
+                            <i class="fa-solid fa-circle-user me-1 text-success"></i> Name
+                        </label>
+                        <input type="text" class="form-control shadow-none border-success-subtle" id="Name" name="name"
+                            value="<%= std.name %>">
+                    </div>
+
+                    <!-- Class & Roll -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Class" class="form-label fw-medium">
+                                <i class="fa-solid fa-graduation-cap me-1 text-success"></i> Class
+                            </label>
+                            <input type="number" class="form-control shadow-none border-success-subtle" id="Class"
+                                name="Class" value="<%= std.Class %>" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Roll_NO" class="form-label fw-medium">
+                                <i class="fa-solid fa-clipboard-user me-1 text-success"></i> Roll No
+                            </label>
+                            <input type="number" class="form-control shadow-none border-success-subtle" id="Roll_NO"
+                                name="roll_no" value="<%= std.roll_no %>">
+                        </div>
+                    </div>
+
+                    <!-- Email / Phone / Age -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="email" class="form-label fw-medium">
+                                <i class="fa-solid fa-envelope me-1 text-success"></i> Email
+                            </label>
+                            <input type="email" class="form-control shadow-none border-success-subtle" id="email"
+                                name="email" value="<%= std.email %>">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="phone_no" class="form-label fw-medium">
+                                <i class="fa-solid fa-phone me-1 text-success"></i> Phone No
+                            </label>
+                            <input type="number" class="form-control shadow-none border-success-subtle" id="phone_no"
+                                name="phone_no" value="<%= std.phone_no %>" required>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="Age" class="form-label fw-medium">
+                                <i class="fa-solid fa-person-cane me-1 text-success"></i> Age
+                            </label>
+                            <input type="number" class="form-control shadow-none border-success-subtle" id="Age"
+                                name="age" value="<%= std.age %>" required>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="mb-4">
+                        <label for="image" class="form-label fw-medium">
+                            <i class="fa-solid fa-images me-1 text-success"></i> Update Image
+                        </label>
+                        <input type="file" class="form-control shadow-none border-success-subtle" id="image" name="img">
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Update Details
+                    </button>
+
+                </form>
+
+            </div>
+
+            <%- include('../includes/footer') %>
+    </body>
+
+</html>

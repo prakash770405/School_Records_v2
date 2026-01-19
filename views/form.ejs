@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header') %>
+
+<body class="bg-light">
+  <%- include('../includes/navbar') %>
+
+  <div class="container my-4">
+
+    <!-- Page Header -->
+    <div class="mb-4">
+      <h2 class="h3 fw-semibold text-success mb-1">
+        <i class="fa-solid fa-user-plus me-1"></i> Add New Student
+      </h2>
+      <p class="text-muted fst-italic mb-0">
+        Enter student academic and contact information
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form action="/form/data" method="post" enctype="multipart/form-data">
+
+      <!-- Name -->
+      <div class="mb-3">
+        <label for="Name" class="form-label fw-medium">
+          <i class="fa-solid fa-circle-user me-1 text-success"></i> Name
+        </label>
+        <input
+          type="text"
+          class="form-control shadow-none"
+          id="Name"
+          name="name"
+          required
+        >
+      </div>
+
+      <!-- Class & Roll -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="Class" class="form-label fw-medium">
+            <i class="fa-solid fa-graduation-cap me-1 text-success"></i> Class
+          </label>
+          <input
+            type="number"
+            class="form-control shadow-none"
+            id="Class"
+            name="Class"
+            required
+          >
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="Roll_NO" class="form-label fw-medium">
+            <i class="fa-solid fa-clipboard-user me-1 text-success"></i> Roll No
+          </label>
+          <input
+            type="number"
+            class="form-control shadow-none"
+            id="Roll_NO"
+            name="roll_no"
+            required
+          >
+        </div>
+      </div>
+
+      <!-- Email / Phone / Age -->
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="email" class="form-label fw-medium">
+            <i class="fa-solid fa-envelope me-1 text-success"></i> Email
+          </label>
+          <input
+            type="email"
+            class="form-control shadow-none"
+            id="email"
+            name="email"
+            required
+          >
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="phone_no" class="form-label fw-medium">
+            <i class="fa-solid fa-phone me-1 text-success"></i> Phone No
+          </label>
+          <input
+            type="number"
+            class="form-control shadow-none"
+            id="phone_no"
+            name="phone_no"
+            required
+          >
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="Age" class="form-label fw-medium">
+            <i class="fa-solid fa-person-cane me-1 text-success"></i> Age
+          </label>
+          <input
+            type="number"
+            class="form-control shadow-none"
+            id="Age"
+            name="age"
+            required
+          >
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="mb-4">
+        <label for="image" class="form-label fw-medium">
+          <i class="fa-solid fa-images me-1 text-success"></i> Image
+        </label>
+        <input
+          type="file"
+          class="form-control shadow-none"
+          id="image"
+          name="img"
+        >
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-outline-primary px-4">
+        Submit
+      </button>
+
+    </form>
+
+  </div>
+
+  <%- include('../includes/footer') %>
+</body>
+</html>

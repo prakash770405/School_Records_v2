@@ -1,0 +1,188 @@
+<nav class="navbar navbar-expand-lg border-bottom shadow-sm glass-navbar"
+     style="font-family: 'Roboto', sans-serif;">
+
+  <div class="container-fluid px-3">
+
+    <!-- Brand -->
+    <a class="navbar-brand fw-semibold d-flex align-items-center gap-2"
+       href="#"
+       style="font-size: 1.2rem; color: #1f2937;">
+      <i class="fa-solid fa-database text-success"></i>
+      School_Records
+    </a>
+
+    <!-- Bootstrap Toggler (ONLY when logged in) -->
+    <% if (isLoggedIn) { %>
+    <button
+      class="navbar-toggler border-0 shadow-none ms-auto"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <% } %>
+
+    <!-- Custom Hamburger (ONLY when NOT logged in) -->
+    <% if (!isLoggedIn) { %>
+    <ul class="navbar-nav ms-auto not-logged-in">
+
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link d-flex align-items-center justify-content-center
+                 rounded-pill px-3 py-2"
+          href="#"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-bars-staggered fs-5 navbar-hamburger text-success"></i>
+        </a>
+
+        <ul
+          class="dropdown-menu dropdown-menu-end mt-2 p-2
+                 glass-dropdown animate-dropdown"
+          style="min-width: 230px;"
+        >
+          <li class="mb-2">
+            <a href="/login"
+               class="dropdown-item rounded-pill px-3 py-2 fw-medium
+                      d-flex align-items-center gap-2">
+              <i class="fa-solid fa-user text-success"></i>
+              Student Login
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a href="/admin/login"
+               class="dropdown-item rounded-pill px-3 py-2 fw-medium
+                      d-flex align-items-center gap-2">
+              <i class="fa-solid fa-user-gear text-success"></i>
+              Admin Login
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <% } %>
+
+    <!-- Collapsible Content (LOGGED IN ONLY) -->
+    <% if (isLoggedIn) { %>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <!-- Left Links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-1">
+
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-pill fw-medium text-secondary active" href="/">
+            <i class="fa-solid fa-house me-1"></i> Home
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-pill fw-medium text-secondary active" href="/Newdata">
+            <i class="fa-solid fa-user-plus me-1"></i> New Student
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-pill fw-medium text-secondary active" href="/subjects/new">
+            <i class="fa-solid fa-book-open me-1"></i> Add Subject
+          </a>
+        </li>
+
+        <% if (showSearch) { %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle px-3 rounded-pill fw-medium text-secondary active"
+             href="#"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false">
+            Class
+            <% if (classFilter) { %> : <%= classFilter %>
+            <% } else { %> : All <% } %>
+          </a>
+
+          <ul class="dropdown-menu shadow-sm border-0 rounded-3 mt-2">
+            <% for (let i = 1; i <= 12; i++) { %>
+            <li>
+              <form action="/" method="get" class="m-0">
+                <input type="hidden" name="classFilter" value="<%= i %>">
+                <button
+                  class="dropdown-item fw-medium <% if (parseInt(classFilter) === i) { %>active<% } %>"
+                  type="submit">
+                  Class <%= i %>
+                </button>
+              </form>
+            </li>
+            <% } %>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <li>
+              <form action="/" method="get" class="m-0">
+                <button
+                  class="dropdown-item fw-medium <% if (!classFilter) { %>active<% } %>"
+                  type="submit">
+                  All Classes
+                </button>
+              </form>
+            </li>
+          </ul>
+        </li>
+        <% } %>
+
+      </ul>
+
+      <!-- User Menu -->
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-medium d-flex align-items-center gap-2 fst-italic"
+             href="#"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false"
+             style="color:#1f2937;">
+            <i class="fa-solid fa-user-gear text-success"></i>
+            <%= user.name %>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end mt-2 p-2 glass-dropdown animate-dropdown"
+              style="min-width: 220px;">
+
+            <li class="mb-2 position-relative">
+              <a class="dropdown-item d-flex align-items-center gap-2 fw-semibold
+                         text-danger rounded-pill px-3 py-2 bg-danger bg-opacity-10"
+                 href="/logout"
+                 onclick="return confirm('Are you sure you want to logout, <%= user.name %>?');">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+              </a>
+            </li>
+
+            <li>
+              <form action="/admin/<%= user._id %>/delete?_method=DELETE"
+                    method="post"
+                    onsubmit="return confirm('Are you sure you want to Delete, <%= user.name %> account permanently?');">
+                <button
+                  type="submit"
+                  class="dropdown-item d-flex align-items-center gap-2 fw-semibold
+                         text-danger rounded-pill px-3 py-2
+                         bg-danger bg-opacity-25 border-0 w-100">
+                  <i class="fa-solid fa-user-xmark"></i>
+                  Delete <%= user.name %>
+                </button>
+              </form>
+            </li>
+
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+    <% } %>
+
+  </div>
+</nav>

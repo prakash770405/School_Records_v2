@@ -1,0 +1,135 @@
+
+<%- include('../includes/header') %>
+
+<body>
+<%- include('../includes/navbar') %>
+
+<div class="container my-4">
+  <div class="row g-4">
+    <!-- ================= IMAGE COLUMN ================= -->
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm h-100">
+        <img 
+          src="<%= student.img.url %>" 
+          class="card-img-top img-fluid rounded"
+          alt="Student Image"
+          style="object-fit: cover; max-height: 350px;"
+        >
+        <div class="card-body text-center">
+          <p><%= formattedDate %></p>
+          <h5 class="card-title mb-1"><%= student.name %></h5>
+          <span class="badge bg-secondary">Class <%= student.Class %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= DETAILS COLUMN ================= -->
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white text-center fw-semibold">
+          Student Details
+        </div>
+
+        <div class="card-body p-0">
+          <table class="table table-striped table-bordered mb-0">
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <td><%= student.name %></td>
+              </tr>
+              <tr>
+                <th>Age</th>
+                <td><%= student.age %></td>
+              </tr>
+              <tr>
+                <th>Class</th>
+                <td><%= student.Class %></td>
+              </tr>
+              <tr>
+                <th>Roll No</th>
+                <td><%= student.roll_no %></td>
+              </tr>
+              <tr>
+                <th>Email</th>
+                <td><%= student.email %></td>
+              </tr>
+              <tr>
+                <th>Phone</th>
+                <td><%= student.phone_no %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+         <a  href="/form/edit/<%=student.id %>" class="text-decoration-none text-reset">
+        <button class="btn btn-outline-warning m-2"><i class="fa-regular fa-pen-to-square"></i> Edit Details</button></a>
+      </div>
+    </div>
+
+    <!-- ================= SUBJECTS COLUMN ================= -->
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-success text-white text-center fw-semibold">
+          Subjects & Marks
+        </div>
+
+        <div class="card-body p-0">
+          <% if (student.subjects && student.subjects.length > 0) { %>
+
+            <table class="table table-hover table-bordered mb-0 align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Subject</th>
+                  <th style="width:120px;">Marks</th>
+                  <th style="width:110px;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <% student.subjects.forEach(sub => { %>
+                  <tr>
+                    <td class="fw-semibold"><%= sub.name %></td>
+
+                    <!-- INLINE UPDATE FORM -->
+                    <td>
+                      <form 
+                        action="/subject/update/<%= student._id %>/<%= sub._id %>" 
+                        method="post"
+                        class="d-flex gap-2"
+                      >
+                        <input
+                          type="number"
+                          name="marks"
+                          class="form-control form-control-sm"
+                          min="0"
+                          max="100"
+                          value="<%= sub.marks %>"
+                          required
+                        >
+                    </td>
+
+                    <td>
+                        <button class="btn btn-sm btn-outline-success">
+                         <i class="fa-solid fa-pencil"></i> Update
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+
+              </tbody>
+            </table>
+
+          <% } else { %>
+            <div class="p-4 text-center text-muted">
+              No subjects added
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<%- include('../includes/footer') %>
+</body>

@@ -1,0 +1,231 @@
+h1{
+    color: blue;
+}
+.cards{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+}
+.student-img {
+    width: auto;        /* Full width of card */
+    height: auto;       /* Height adjusts automatically */
+    max-height: 175px;  /* Optional: limit height on large screens */
+    object-fit: cover;  /* Crops image nicely if too tall */
+}
+/* Navbar base */
+  .navbar {
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+
+  /* Brand hover */
+  .navbar-brand {
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  .navbar-brand:hover {
+    transform: translateY(-1px);
+    color: #198754 !important;
+  }
+
+  /* Nav links */
+  .navbar .nav-link {
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .navbar .nav-link:hover {
+    color: #198754 !important;
+    background-color: rgba(25, 135, 84, 0.08);
+  }
+
+  /* Active pill feel */
+  .navbar .nav-link.active {
+    background-color: rgba(25, 135, 84, 0.12);
+    color: #198754 !important;
+  }
+
+  /* Dropdown animation */
+  .dropdown-menu {
+    animation: dropdownFade 0.25s ease;
+    transform-origin: top;
+  }
+
+  @keyframes dropdownFade {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Dropdown items */
+  .dropdown-item {
+    transition: background-color 0.2s ease, padding-left 0.2s ease;
+  }
+
+  .dropdown-item:hover {
+    background-color: rgba(25, 135, 84, 0.08);
+    padding-left: 1.5rem;
+  }
+
+  /* User menu hover */
+  #adminDropdown:hover {
+    color: #198754 !important;
+  }
+
+  /* Toggler animation */
+  .navbar-toggler {
+    transition: transform 0.2s ease;
+  }
+  .navbar-toggler:hover {
+    transform: scale(1.05);
+  }
+
+  /* Mobile collapse smoothness */
+  .navbar-collapse {
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 991.98px) {
+    .navbar-nav .nav-item {
+      margin-bottom: 0.5rem;
+    }
+}
+
+.student-img {
+  width: 100%;
+  height: 220px;          /* consistent height */
+  object-fit: cover;     /* fills without distortion */
+  background-color: #e9f5ee; /* subtle green fallback */
+}
+/* ===== Glass Effect Dropdown ===== */
+.glass-dropdown {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Remove default bootstrap dropdown styling */
+.glass-dropdown .dropdown-item {
+  background: transparent;
+}
+
+/* ===== Pill Hover Effect ===== */
+.glass-dropdown .dropdown-item.rounded-pill:hover {
+  background-color:#198754 !important;
+  color: #fff !important;
+}
+
+/* ===== Dropdown Animation ===== */
+.animate-dropdown {
+  animation: dropdownFade 0.25s ease-out forwards;
+  transform-origin: top right;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Gradient Green Glass Navbar ===== */
+.glass-navbar {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(25, 135, 84, 0.22),
+      rgba(255, 255, 255, 0.65)
+    );
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: 1px solid rgba(25, 135, 84, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+/* Brand glow */
+.glass-navbar .navbar-brand i {
+  filter: drop-shadow(0 0 4px rgba(25, 135, 84, 0.4));
+}
+
+/* Nav link contrast */
+.glass-navbar .nav-link {
+  color: #1f2937;
+}
+
+/* Nav hover pill enhancement */
+.glass-navbar .nav-link:hover {
+  background-color: rgba(25, 135, 84, 0.18);
+  color: #198754 !important;
+}
+
+/* Active pill stronger */
+.glass-navbar .nav-link.active {
+  background-color: rgba(25, 135, 84, 0.25);
+  color: #198754 !important;
+}
+
+@media (max-width: 991.98px) {
+  /* Hamburger container */
+  .navbar-nav.ms-auto.not-logged-in {
+    position: relative;   /* needed for absolute dropdown */
+    flex-shrink: 0;
+  }
+
+  /* Hamburger link */
+  .navbar-nav.ms-auto.not-logged-in .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    background-color: #ffffff; /* solid background for toggle */
+    color: #198754;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    min-width: 50px;
+    transition: all 0.2s ease;
+    z-index: 1100;       /* above navbar */
+  }
+
+  /* Dropdown menu */
+  .navbar-nav.ms-auto.not-logged-in .dropdown-menu {
+    position: absolute;  /* overlay content, don’t push down */
+    top: 100%;           /* below hamburger */
+    right: 0;
+    left: auto;
+    min-width: 220px;    /* same as toggle width */
+    padding: 0.5rem 0;
+    border-radius: 0.375rem;
+    background-color: #ffffff; /* solid background */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    z-index: 1100;
+  }
+
+  /* Dropdown items */
+  .navbar-nav.ms-auto.not-logged-in .dropdown-item {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1f2937;
+    background: transparent;
+  }
+
+  .navbar-nav.ms-auto.not-logged-in .dropdown-item:hover {
+    background-color: #e9f5ee; /* subtle hover color */
+    color: #198754;
+  }
+}

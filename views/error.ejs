@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header') %>
+<link rel="stylesheet" href="/index.css">
+
+<body class="d-flex flex-column min-vh-100 text-black bg-light">
+
+  <!-- Navbar -->
+  <%- include('../includes/navbar') %>
+
+  <!-- Main Content -->
+  <main class="flex-grow-1 d-flex justify-content-center align-items-center py-5">
+    <div class="container text-center">
+      <div class="card shadow-sm border-0 bg-white p-4 p-md-5">
+        <div class="card-body">
+
+          <!-- Error Icon & Title -->
+          <h5 class="display-6 text-danger mb-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Error <%= status %> !!
+          <%= message %> <br> </h5>
+
+          <!-- Go Home Button --> <br>
+          <a href="/" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-house me-1"></i> Go to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <%- include('../includes/footer') %>
+
+</body>
+</html>
