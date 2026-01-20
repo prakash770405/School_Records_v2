@@ -60,7 +60,7 @@
             </tbody>
           </table>
         </div>
-         <a  href="/form/edit/<%=student.id %>" class="text-decoration-none text-reset">
+         <a  href="/students/form/edit/<%=student.id %>" class="text-decoration-none text-reset">
         <button class="btn btn-outline-warning m-2"><i class="fa-regular fa-pen-to-square"></i> Edit Details</button></a>
       </div>
     </div>
@@ -92,7 +92,7 @@
                     <!-- INLINE UPDATE FORM -->
                     <td>
                       <form 
-                        action="/subject/update/<%= student._id %>/<%= sub._id %>" 
+                        action="/subjects/update/<%= student._id %>/<%= sub._id %>" 
                         method="post"
                         class="d-flex gap-2"
                       >

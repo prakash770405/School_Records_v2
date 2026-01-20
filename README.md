@@ -8,7 +8,7 @@ A multi-role Express and MongoDB application for managing a student database. Th
 - **Student Management:** Full **CRUD** (Create, Read, Update, Delete) capabilities for student records.
 - **Image Handling:** Integrated with **Cloudinary** and **Multer** for uploading and storing student profile images.
 - **Data Validation:** Robust input validation using **Joi** to ensure data integrity.
-- **Authentication:** Secure password handling with **Bcrypt** and authentication via **JSON Web Tokens (JWT)**.
+- **Authentication:** Secure password handling with **Bcrypt** and authentication via **JSON Web Tokens (JWT)**. Includes **OTP-based Email Verification** for Admin accounts.
 - **Email Integration:** Uses **Nodemailer** for email communication capabilities.
 - **Date Management:** Precise date handling using **Luxon**.
 
@@ -48,7 +48,7 @@ Dependencies from package.json:
 
 ## Project structure (important files)
 
-- `index.js` - Main server file: starts the server and connects to the database.
+- `app.js` - Main server file: starts the server and connects to the database.
 - `models/student.js` - Mongoose schema for Student records, containing personal info, marks, and image data.
 - `models/owner.js` - Mongoose schema for the Owner (referenced by Student).
 - `package.json` - Project metadata and dependencies.
@@ -74,16 +74,29 @@ The application uses Mongoose models to structure the database:
 
 ## Routes
 
-*(Inferred structure based on REST conventions and dependencies)*
+**General**
+- `GET /` — Dashboard / List all students (supports filtering by Class).
 
-- `GET /` — Dashboard / Home.
-- `GET /students` — List all students.
-- `GET /students/new` — Form to add a new student.
-- `POST /students` — Create a new student (handles image upload).
-- `GET /students/:id` — View student details.
-- `GET /students/:id/edit` — Form to edit a student.
-- `PUT /students/:id` — Update student details.
-- `DELETE /students/:id` — Delete a student record.
+**Students (`/students`)**
+- `GET /newdata` — Form to add a new student.
+- `POST /form/data` — Create a new student (handles image upload).
+- `GET /view/:id` — View student details.
+- `GET /form/edit/:id` — Form to edit a student.
+- `PUT /form/:id/edit` — Update student details.
+- `DELETE /form/:id/delete` — Delete a student record.
+
+**Subjects (`/subjects`)**
+- `GET /new` — Form to add subjects to a specific class.
+- `POST /add` — Add subjects to all students in a class.
+- `POST /update/:studentId/:subjectId` — Update marks for a specific subject.
+
+**Admin (`/admin`)**
+- `GET /signup` — Admin signup form.
+- `POST /signup` — Initiate admin signup (sends OTP).
+- `POST /verify-otp` — Verify email and create session.
+- `GET /login` — Admin login form.
+- `POST /login` — Authenticate admin.
+- `GET /logout` — Logout.
 
 > Note: Forms that perform PUT and DELETE use `method-override` with a query parameter of `_method`.
 
@@ -110,7 +123,7 @@ npm install
 4. Start the app:
 
 ```powershell
-node index.js
+node app.js
 ```
 
 5. Open your browser at: `http://localhost:3000/` (Check console for actual port).
