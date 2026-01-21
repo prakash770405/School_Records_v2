@@ -17,5 +17,18 @@
 
 
 <link rel="stylesheet" href="/css/index.css">
+<script>
+  setTimeout(() => {
+    document.querySelectorAll(".alert").forEach(el => {
+      el.classList.remove("show");
+      el.classList.add("fade");
+      setTimeout(() => el.remove(), 300);
+    });
+  }, 3000);
+</script>
+
+
+
+
 
 </header>

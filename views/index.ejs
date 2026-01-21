@@ -2,9 +2,11 @@
 
 <body class="bg-light text-black">
   <%- include('../includes/navbar') %>
+  <%- include("../includes/flash") %>
+
 
   <!-- PAGE HEADER -->
-  <header class="container py-4">
+  <header class="container py-2 mb-3">
 
     <!-- Title + Count -->
     <div class="d-flex align-items-center flex-wrap gap-2">
@@ -42,7 +44,7 @@
 
       <div
         id="noResults"
-        class="alert alert-warning mt-3 rounded-pill d-none text-secondary fw-semibold text-center">
+        class="alert alert-warning mt-3 rounded-pill d-none text-secondary fw-semibold text-center ">
         No matching students found.
       </div>
     </div>

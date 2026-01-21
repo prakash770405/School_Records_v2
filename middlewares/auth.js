@@ -12,7 +12,7 @@ const auth = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const owner = await Owner.findById(decoded.id).select("-password");
 
-    if (!owner) {
+    if (!owner) { 
       return res.redirect('/admin/login');
     }
 
@@ -25,6 +25,7 @@ const auth = async (req, res, next) => {
     next();
   } catch (err) {
     console.error("Auth Middleware Error:", err.message);
+    req.flash("error","Sorry You are not authorized");
     return res.redirect('/admin/login');
   }
 };

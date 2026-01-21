@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
 const Student = require('../models/student');
+const noCache = require("../middlewares/noCache");
 
-
-router.get("/new", auth, (req, res) => {
+router.use(auth, noCache);
+router.get("/new", auth,noCache, (req, res) => {
   res.render("addsubject.ejs", { isLoggedIn: req.isLoggedIn, showSearch: false });
 })
 
@@ -36,6 +37,8 @@ router.post("/add", auth, async (req, res) => {
   }
 
   console.log("Subjects added:", subjectList);
+  req.flash("success", "Subjects added successfully");
+
   res.redirect("/");
 });
 
@@ -53,6 +56,7 @@ router.post("/update/:studentId/:subjectId", auth, async (req, res) => {
       }
     }
   );
+  req.flash("success", "Student Marks Updated Successfully");
   res.redirect(`/students/view/${studentId}`);
 })
 

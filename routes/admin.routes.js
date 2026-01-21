@@ -2,73 +2,68 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
 const transporter = require("../config/email");
-const Owner = require('../models/owner');
+const Owner = require("../models/owner");
+const noCache = require("../middlewares/noCache");
 
-// ADMIN SIGNUP (one-time)
-router.get('/signup', (req, res) => {
-  res.render("signupform.ejs", { isLoggedIn: req.isLoggedIn, showSearch: false, error: null });
+/* =========================
+   ADMIN SIGNUP
+========================= */
+router.get("/signup", (req, res) => {
+  res.render("signupform.ejs", {
+    isLoggedIn: req.isLoggedIn,
+    showSearch: false
+  });
 });
 
-router.post('/signup', async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     const { name, email, phone_no, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.render('signupform.ejs', {
-        error: 'Name, Email, and Password are required!',
-        showSearch: false
-      });
+      req.flash("error", "All fields are required");
+      return res.redirect("/admin/signup");
     }
 
     const existing = await Owner.findOne({ email });
 
     if (existing && existing.isVerified) {
-      return res.render('signupform.ejs', {
-        error: 'Admin already exists!',
-        showSearch: false
-      });
+      req.flash("error", "Admin already exists");
+      return res.redirect("/admin/signup");
     }
 
     if (existing && !existing.isVerified) {
-      await Owner.deleteOne({ email }); // cleanup unverified admin
+      await Owner.deleteOne({ email });
     }
 
-    // 🔐 Generate 4-digit OTP
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
     const owner = new Owner({
       name,
       email,
-      phone_no, 
+      phone_no,
       password,
       otp,
-      otpExpires: Date.now() + 5 * 60 * 1000, // 5 minutes
+      otpExpires: Date.now() + 5 * 60 * 1000,
       isVerified: false
     });
 
-    await owner.save(); // password hashes automatically ✔
+    await owner.save();
 
-const date = new Date(Date.now()); // force IST
+    const requestTime = new Date().toLocaleString("en-IN", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    });
 
-const requestTime = date.toLocaleString("en-IN", {
-  year: "numeric",
-  month: "long",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: true
-});
-
-
-   console.log(requestTime); // 18 January 2026, 01:30:45 PM
-
-
-    await transporter.sendMail({  // 📧 Send OTP email
+    await transporter.sendMail({
       to: email,
       subject: "Verify Your Admin Email – School Records",
       html: `
-    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
       <h2 style="color: #198754;">Email Verification</h2>
 
        <p>
@@ -107,50 +102,49 @@ const requestTime = date.toLocaleString("en-IN", {
 
       <hr style="margin: 24px 0;">
 
-      <p style="font-size: 13px; color: #e42222;">
+      <p style="font-size: 13px; color: #444242;">
         This is an automated message from the School Records system.
       </p>
     </div>
   `
     });
 
-    res.render("verify.ejs", {
-      email,
-      error: null,
-      showSearch: false
-    });
+    // 🔑 redirect instead of render
+    return res.redirect(`/admin/verify?email=${email}`);
 
   } catch (err) {
     console.error(err);
-    res.render('signupform.ejs', {
-      error: 'Something went wrong.',
-      showSearch: false
-    });
+    req.flash("error", "Something went wrong");
+    return res.redirect("/admin/signup");
   }
 });
 
-router.post('/verify-otp', async (req, res) => {
+/* =========================
+   VERIFY PAGE
+========================= */
+router.get("/verify",noCache, (req, res) => {
+  res.render("verify.ejs", {
+    email: req.query.email,
+    showSearch: false
+  });
+});
+
+/* =========================
+   VERIFY OTP
+========================= */
+router.post("/verify-otp",noCache, async (req, res) => {
   const { email, otp } = req.body;
 
   const owner = await Owner.findOne({ email });
 
   if (!owner) {
-    return res.render("verify.ejs", {
-      email,
-      error: "Invalid request",
-      showSearch: false
-    });
+    req.flash("error", "Invalid request");
+    return res.redirect(`/admin/verify?email=${email}`);
   }
 
-  if (
-    owner.otp !== otp ||
-    owner.otpExpires < Date.now()
-  ) {
-    return res.render("verify.ejs", {
-      email,
-      error: "OTP invalid or expired",
-      showSearch: false
-    });
+  if (owner.otp !== otp || owner.otpExpires < Date.now()) {
+    req.flash("error", "OTP invalid or expired");
+    return res.redirect(`/admin/verify?email=${email}`);
   }
 
   owner.isVerified = true;
@@ -158,104 +152,113 @@ router.post('/verify-otp', async (req, res) => {
   owner.otpExpires = undefined;
   await owner.save();
 
-  // 🔐 Auto-login after verification
   const token = owner.generateToken();
-  res.cookie('token', token, {
+  res.cookie("token", token, {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000
   });
 
-  res.redirect("/");
+  req.flash("success", "Welcome to School Records");
+  return res.redirect("/");
 });
 
-// ADMIN LOGIN
+/* =========================
+   RESEND OTP
+========================= */
+router.post("/resend-otp",noCache, async (req, res) => {
+  const { email } = req.body;
+
+  const owner = await Owner.findOne({ email });
+
+  if (!owner) {
+    req.flash("error", "Invalid request");
+    return res.redirect("/admin/signup");
+  }
+
+  if (owner.isVerified) {
+    req.flash("success", "Account already verified");
+    return res.redirect("/admin/login");
+  }
+
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+  owner.otp = otp;
+  owner.otpExpires = Date.now() + 5 * 60 * 1000;
+  await owner.save();
+
+  await transporter.sendMail({
+    to: email,
+    subject: "New OTP – School Records",
+    html: `<h1>${otp}</h1><p>Valid for 5 minutes</p>`
+  });
+
+  req.flash("success", "New OTP sent to your email");
+  return res.redirect(`/admin/verify?email=${email}`);
+});
+
+/* =========================
+   LOGIN / LOGOUT
+========================= */
 router.get("/login", (req, res) => {
-  res.render("Loginform.ejs", { isLoggedIn: req.isLoggedIn, showSearch: false, error: null });
+  res.render("Loginform.ejs", {
+    isLoggedIn: req.isLoggedIn,
+    showSearch: false
+  });
 });
 
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
+router.post("/login", async (req, res) => {
   try {
+    const { email, password } = req.body;
     const owner = await Owner.findOne({ email });
 
-    // ❌ Email not found
-    if (!owner) {
-      return res.render('Loginform.ejs', {
-        error: 'Invalid email or password',
-        showSearch: false
-      });
+    if (!owner || !(await owner.comparePassword(password)) || !owner.isVerified) {
+      req.flash("error", "Invalid email or password");
+      return res.redirect("/admin/login");
     }
 
-    const isMatch = await owner.comparePassword(password);
-
-    // ❌ Password mismatch
-    if (!isMatch) {
-      return res.render('Loginform.ejs', {
-        error: 'Invalid email or password',
-        showSearch: false
-      });
-    }
-
-    if (!owner.isVerified) {
-      return res.render('Loginform.ejs', {
-        error: 'Please verify your email before login',
-        showSearch: false
-      });
-    }
-
-    // ✅ Login success
     const token = owner.generateToken();
-
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    return res.redirect('/');
-
+    req.flash("success", "Welcome to School Records");
+    return res.redirect("/");
   } catch (err) {
-    console.error(err);
-    return res.render('Loginform.ejs', {
-      error: 'Something went wrong. Please try again.',
-      showSearch: false
-    });
+    req.flash("error", "Invalid email or password");
+    return res.redirect("/admin/login");
   }
 });
 
-// Logout route
-router.get("/logout", auth, (req, res) => {
-  res.clearCookie("token"); // Remove the JWT cookie
-
-  // Set headers to prevent caching
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  res.set('Pragma', 'no-cache');
-  res.set('Expires', '0');
-  res.redirect("/admin/login");    // Redirect to login page
+router.get("/logout", auth,noCache, (req, res) => {
+  res.clearCookie("token");
+  res.set({
+    "Cache-Control": "no-store, no-cache, must-revalidate, private",
+    "Pragma": "no-cache",
+    "Expires": "0"
+  });
+  req.flash("success", "Logged out successfully");
+  res.redirect("/admin/login");
 });
 
-router.delete("/:adminId/delete", auth, async (req, res) => {
-  try {
-    const { adminId } = req.params;
-    if (req.owner._id.toString() !== adminId) {
-      return res.status(403).send("Unauthorized action");
-    }
-    const deletedAdmin = await Owner.findByIdAndDelete(adminId);
-    console.log("Deleted admin:", deletedAdmin);
-    // logout after delete
-    res.clearCookie("token");
-
-    // Prevent cached auth pages
-    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-    res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-
-    res.redirect("admin/login");
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Failed to delete admin");
+/* =========================
+   DELETE ADMIN
+========================= */
+router.delete("/:adminId/delete", auth, noCache, async (req, res) => {
+  if (req.owner._id.toString() !== req.params.adminId) {
+    return res.status(403).send("Unauthorized");
   }
+
+  await Owner.findByIdAndDelete(req.params.adminId);
+  
+  res.clearCookie("token");
+  res.set({
+  "Cache-Control": "no-store, no-cache, must-revalidate, private",
+  "Pragma": "no-cache",
+  "Expires": "0"
+});
+  req.flash("success", "Admin deleted successfully");
+  res.redirect("/admin/login");
 });
 
-  module.exports=router;
+module.exports = router;

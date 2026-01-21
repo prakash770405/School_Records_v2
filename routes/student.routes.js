@@ -2,11 +2,18 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../config/multer");
 const auth = require("../middlewares/auth");
+const noCache = require("../middlewares/noCache");
+const { validateStudent } = require('../middlewares/validatestudent');
 const Student = require('../models/student');
 
-const { validateStudent } = require('../middlewares/validatestudent');
 
-router.get("/newdata", auth, validateStudent, (req, res) => {
+router.use(auth, noCache);
+
+
+
+
+
+router.get("/newdata", auth,noCache, validateStudent, (req, res) => {
   res.render("form.ejs", { isLoggedIn: req.isLoggedIn, showSearch: false });
 })
 
@@ -37,6 +44,7 @@ router.post("/form/data", auth, upload.single("img"), validateStudent, async (re
   });
   const data = await student.save();
   console.log(res.locals.user);
+  req.flash("success", "Student added successfully");
   res.redirect("/");
 });
 
@@ -81,6 +89,7 @@ router.put("/form/:id/edit", auth, upload.single("img"), validateStudent, async 
     }
   }
   await Student.findByIdAndUpdate(id, updateData);  // Update student
+  req.flash("success", "Student Data Updated Successfully");
   res.redirect("/");
 });
 
@@ -88,6 +97,8 @@ router.delete("/form/:id/delete", auth, async (req, res) => {
   const { id } = req.params;
   console.log(id);
   await Student.findByIdAndDelete(id)
+  req.flash("success", "Student Deleted Successfully");
+
   res.redirect("/");
 })
 

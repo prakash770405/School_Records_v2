@@ -7,6 +7,8 @@
 
   <!-- Navbar -->
   <%- include('../includes/navbar') %>
+  <%- include("../includes/flash") %>
+
 
   <!-- Main Content -->
   <main class="flex-grow-1 d-flex justify-content-center align-items-center py-5">
@@ -19,10 +21,7 @@
             <i class="fa-solid fa-triangle-exclamation"></i> Error <%= status %> !!
           <%= message %> <br> </h5>
 
-          <!-- Go Home Button --> <br>
-          <a href="/" class="btn btn-primary btn-lg">
-            <i class="fa-solid fa-house me-1"></i> Go to Home
-          </a>
+         
         </div>
       </div>
     </div>

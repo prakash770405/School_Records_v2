@@ -1,0 +1,22 @@
+
+<header class="container mt-3" style="max-width: 720px;">
+
+  <% if (success && success.length) { %>
+    <div class="alert alert-success flash-pill alert-dismissible fade show fst-italic"
+         role="alert">
+      <i class="fa-solid fa-circle-check"></i>
+      <span><%= success[0] %></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+
+  <% if (error && error.length) { %>
+    <div class="alert alert-danger flash-pill alert-dismissible fade show fst-italic"
+         role="alert">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span><%= error[0] %></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+
+</header>

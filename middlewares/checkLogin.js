@@ -14,9 +14,11 @@ const checkLogin = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const owner = await Owner.findById(decoded.id).select("-password");
     if (!owner) {
+      req.user = null;
       req.isLoggedIn = false;
     } else {
       req.owner = owner;
+      req.user = owner
       req.isLoggedIn = true;
     }
     next();

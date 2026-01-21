@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
 const Student = require("../models/student");
+const noCache = require("../middlewares/noCache");
 
 
-router.get("/", auth, async (req, res) => {
+router.get("/", auth,noCache, async (req, res) => {
   const { classFilter } = req.query;
 
   let query = {};

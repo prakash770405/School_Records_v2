@@ -4,8 +4,8 @@
 
 <body class="bg-light">
   <%- include('../includes/navbar') %>
+  <%- include("../includes/flash") %>
 
-  <!-- Full width verification section -->
   <div class="container-fluid px-3 px-md-5 py-5">
 
     <!-- Title -->
@@ -18,84 +18,83 @@
       </p>
     </div>
 
-    <!-- Error -->
-    <% if (error) { %>
-      <div
-        id="verifyError"
-        class="alert alert-danger alert-dismissible fade show text-center fw-semibold mx-auto"
-        style="max-width: 720px;"
-        role="alert"
-      >
-        <i class="fa-solid fa-triangle-exclamation me-1"></i>
-        <%= error %>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    <% } %>
+    <!-- Card -->
+    <div class="mx-auto" style="max-width: 720px;">
 
-    <!-- Verification Form -->
-    <form
-      action="/admin/verify-otp"
-      method="post"
-      class="mx-auto"
-      style="max-width: 720px;"
-    >
+      <!-- OTP Form -->
+      <form action="/admin/verify-otp" method="post">
 
-      <!-- Hidden Email -->
-      <input type="hidden" name="email" value="<%= email %>">
+        <input type="hidden" name="email" value="<%= email %>">
 
-      <!-- OTP -->
-      <div class="mb-4">
-        <label for="otp" class="form-label fw-medium">
-          <i class="fa-solid fa-shield-halved me-1 text-success"></i> Verification Code
-        </label>
-        <input
-          type="text"
-          class="form-control shadow-none text-center fs-5 fw-semibold"
-          id="otp"
-          name="otp"
-          placeholder="Enter 4-digit OTP"
-          maxlength="4"
-          pattern="[0-9]{4}"
-          required
-        >
-        <div class="form-text text-muted">
-          Code expires in 5 minutes
+        <div class="mb-4">
+          <label class="form-label fw-medium">
+            <i class="fa-solid fa-shield-halved me-1 text-success"></i>
+            Verification Code
+          </label>
+
+          <input
+            type="text"
+            class="form-control shadow-none text-center fs-5 fw-semibold"
+            name="otp"
+            maxlength="4"
+            pattern="[0-9]{4}"
+            required
+          >
+
+          <div class="form-text text-muted">
+            Code expires in 5 minutes
+          </div>
         </div>
-      </div>
 
-      <!-- Actions -->
-      <div class="d-flex justify-content-between align-items-center">
-        <button type="submit" class="btn btn-success px-4">
-          Verify
-        </button>
+        <!-- Buttons Row -->
+       <!-- Buttons Row -->
+<div class="d-flex justify-content-between align-items-center gap-2 mt-3 flex-nowrap">
 
-        <a
-          href="/admin/signup"
-          class="text-decoration-none small fw-medium text-primary"
-        >
-          Change email?
-        </a>
-      </div>
+  <!-- Verify -->
+  <form action="/admin/verify-otp" method="post" class="m-0 flex-shrink-0">
+    <input type="hidden" name="email" value="<%= email %>">
+    <button type="submit" class="btn btn-success px-4">
+      Verify
+    </button>
+  </form>
 
-    </form>
+  <!-- Resend -->
+  <form action="/admin/resend-otp" method="POST" class="m-0 flex-shrink-0">
+    <input type="hidden" name="email" value="<%= email %>">
+    <button
+      type="submit"
+      id="resendBtn"
+      class="btn btn-outline-secondary px-3"
+      disabled
+    >
+      Resend OTP (<span id="timer">30</span>s)
+    </button>
+  </form>
+
+</div>
+
+
+    </div>
   </div>
 
   <%- include('../includes/footer') %>
 
+  <!-- Timer -->
   <script>
-    setTimeout(() => {
-      const alert = document.getElementById('verifyError');
-      if (alert) {
-        alert.classList.remove('show');
-        alert.classList.add('hide');
-        setTimeout(() => alert.remove(), 300);
+    let timeLeft = 60;
+    const timerEl = document.getElementById("timer");
+    const resendBtn = document.getElementById("resendBtn");
+
+    const countdown = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        resendBtn.disabled = false;
+        resendBtn.textContent = "Resend OTP";
       }
-    }, 3000);
+    }, 1000);
   </script>
 
 </body>

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const auth = require('./middlewares/auth');
+const session = require("express-session");
+const flash = require("connect-flash");
 const checkLogin = require("./middlewares/checkLogin");
 const app = express();
 const cookieParser = require('cookie-parser');
@@ -8,6 +9,17 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 
 app.use(cookieParser());
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "refresh_secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(flash());
+
 app.use(express.json());
 app.use(checkLogin);
 
@@ -21,6 +33,12 @@ app.use((req, res, next) => {
   res.locals.isLoggedIn = !!req.user;
   next();
 });
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
 
 async function main() {
   await mongoose.connect(process.env.MONGO_URL)
@@ -37,14 +55,17 @@ app.listen(8080, (req, res) => {
 
 //-------------------------Routers-----------------------
 app.use("/", require("./routes/index.routes"));
-app.use("/students", require("./routes/student.routes"));
 app.use("/subjects",require("./routes/subject.routes"));
 app.use("/admin", require("./routes/admin.routes"));
-
+app.use("/students", require("./routes/student.routes"));
 
 // 404 handler for unknown routes
-app.use(auth, (req, res, next) => {
-  const message = "Page Not Found";
-  const status = 404;
-  res.status(status).render("../views/error.ejs", { isLoggedIn: req.isLoggedIn, message, showSearch: false, status });
+app.use((req, res ) => {
+ 
+  res.status(404).render("error.ejs", { 
+    isLoggedIn: req.isLoggedIn,
+     message:"Page Not Found", 
+     showSearch: false, 
+     status:404
+    });
 });
