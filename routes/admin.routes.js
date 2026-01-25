@@ -155,7 +155,9 @@ router.post("/verify-otp",noCache, async (req, res) => {
   const token = owner.generateToken();
   res.cookie("token", token, {
     httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: true,
+    sameSite: 'strict'
   });
 
   req.flash("success", "Welcome to School Records");
@@ -219,7 +221,9 @@ router.post("/login", async (req, res) => {
     const token = owner.generateToken();
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: true,
+      sameSite: 'strict'
     });
 
     req.flash("success", "Welcome to School Records");
