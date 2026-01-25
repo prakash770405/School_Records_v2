@@ -1,20 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./includes/header') %>
+<%- include('../includes/header') %>
 
 <body class="bg-light">
-  <%- include('./includes/navbar') %>
-  <%- include("./includes/flash") %>
+  <%- include('../includes/navbar') %>
+  <%- include("../includes/flash") %>
   <!-- Full width login section -->
   <div class="container-fluid px-3 px-md-5 py-4 ">
 
     <!-- Title -->
     <div class="text-center mb-4">
       <h2 class="fw-semibold text-success mb-1">
-        <i class="fa-solid fa-user-secret me-1"></i> Admin Login
+        <i class="fa-solid fa-user-graduate"></i> Student Login
       </h2>
       <p class="text-muted small fst-italic mb-0">
-        Sign in to manage School Records
+        Sign in to see your student profile.
       </p>
     </div>
 
@@ -22,7 +23,7 @@
 
     <!-- Form (FULL WIDTH) -->
     <form
-      action="/admin/login"
+      action="/student/login"
       method="post"
       class="mx-auto"
       style="max-width: 720px;"
@@ -31,7 +32,7 @@
       <!-- Email -->
       <div class="mb-3">
         <label for="email" class="form-label fw-medium">
-          <i class="fa-solid fa-envelope me-1 text-success"></i> Email
+          <i class="fa-solid fa-envelope me-1 text-success"></i>Student Registered Email
         </label>
         <input
           type="email"
@@ -65,17 +66,16 @@
         </button>
 
         <a
-          href="/admin/signup"
-          class="text-decoration-none small fw-medium text-primary"
-        >
-          Create new account?
+          href="/student/create-password"
+          class="text-decoration-none small fw-medium text-primary p-4"
+        >New Student! Set Password ?? 
         </a>
       </div>
 
     </form>
   </div>
 
-  <%- include('./includes/footer') %>
+  <%- include('../includes/footer') %>
 
   <script>
     setTimeout(() => {

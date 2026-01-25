@@ -1,8 +1,8 @@
-<%- include('../includes/header') %>
+<%- include('./includes/header') %>
 
 <body class="bg-light text-black">
-  <%- include('../includes/navbar') %>
-  <%- include("../includes/flash") %>
+  <%- include('./includes/navbar') %>
+  <%- include("./includes/flash") %>
 
 
   <!-- PAGE HEADER -->
@@ -133,6 +133,31 @@
       <% } %>
     </div>
   </div>
+    <%- include('./includes/footer') %>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("searchInput");
+      const studentCols = document.querySelectorAll(".col-12.col-sm-6.col-md-4.col-lg-3");
+      const noResults = document.getElementById("noResults");
+      searchInput.addEventListener("input", () => {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+        studentCols.forEach(col => {
+          // Find the Name list item
+          const nameItem = col.querySelector(".list-group-item");
+          if (!nameItem) return;
+          const studentName = nameItem.textContent
+            .replace("Name:-", "")
+            .toLowerCase()
+            .trim();
+          const match = studentName.includes(searchTerm);
+          col.style.display = match ? "" : "none";
+          if (match) visibleCount++;
+        });
+        // Toggle "no results" message
+        noResults.classList.toggle("d-none", visibleCount > 0);
+      });
+    });
+  </script>
 
-  <%- include('../includes/footer') %>
 </body>

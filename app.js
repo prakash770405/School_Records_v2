@@ -57,6 +57,7 @@ app.listen(8080, (req, res) => {
 app.use("/", require("./routes/index.routes"));
 app.use("/subjects",require("./routes/subject.routes"));
 app.use("/admin", require("./routes/admin.routes"));
+app.use("/student", require("./routes/studentAuth.routes"));
 app.use("/students", require("./routes/student.routes"));
 
 // 404 handler for unknown routes

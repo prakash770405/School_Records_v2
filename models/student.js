@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Owner = require('./owner.js')
 const Schema = mongoose.Schema;
 const Studentschema = new Schema({
   name: { type: String, default: 'hahaha', trim: true, },

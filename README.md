@@ -143,3 +143,52 @@ node app.js
 ## License
 
 This project uses the ISC license as indicated in `package.json`.
+```
+Refresh
+├─ app.js
+├─ config
+│  ├─ cloudinary.js
+│  ├─ email.js
+│  └─ multer.js
+├─ Includes
+│  ├─ flash.ejs
+│  ├─ footer.ejs
+│  ├─ header.ejs
+│  └─ navbar.ejs
+├─ middlewares
+│  ├─ auth.js
+│  ├─ checkLogin.js
+│  ├─ noCache.js
+│  ├─ studentAuth.js
+│  └─ validatestudent.js
+├─ models
+│  ├─ owner.js
+│  ├─ student.js
+│  └─ studentAuth.js
+├─ package-lock.json
+├─ package.json
+├─ public
+│  └─ css
+│     └─ index.css
+├─ README.md
+├─ routes
+│  ├─ admin.routes.js
+│  ├─ index.routes.js
+│  ├─ student.routes.js
+│  ├─ studentAuth.routes.js
+│  └─ subject.routes.js
+├─ schema.js
+└─ views
+   ├─ addsubject.ejs
+   ├─ editform.ejs
+   ├─ error.ejs
+   ├─ form.ejs
+   ├─ index.ejs
+   ├─ Loginform.ejs
+   ├─ signupform.ejs
+   ├─ student
+   │  └─ login.ejs
+   ├─ verify.ejs
+   └─ viewdetail.ejs
+
+```
