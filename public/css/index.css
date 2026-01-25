@@ -115,11 +115,22 @@ h1{
   background: transparent;
 }
 
+
+
+
+
+
+
+
 /* ===== Pill Hover Effect ===== */
 .glass-dropdown .dropdown-item.rounded-pill:hover {
-  background-color:#198754 !important;
+  background-color:#a1afa8 !important;
   color: #fff !important;
 }
+
+
+
+
 
 /* ===== Dropdown Animation ===== */
 .animate-dropdown {

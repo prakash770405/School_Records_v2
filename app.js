@@ -8,7 +8,11 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 
+const detectStudent = require("./middlewares/detectStudent");
+
+
 app.use(cookieParser());
+app.use(detectStudent);
 
 app.use(
   session({

@@ -6,7 +6,7 @@ const auth = async (req, res, next) => {
     const token = req.cookies?.token;
 
     if (!token) {
-      return res.redirect('/admin/login'); // not logged in
+      return res.redirect('/admin/login'); // not logged in as admin
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
