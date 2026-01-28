@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-const transporter = require("../config/email");
+// const transporter = require("../config/email");
 const Owner = require("../models/owner");
 const noCache = require("../middlewares/noCache");
-
+const emailApi = require("../config/email");
 /* =========================
    ADMIN SIGNUP
 ========================= */
@@ -59,11 +59,15 @@ router.post("/signup", async (req, res) => {
       hour12: true
     });
 
-    await transporter.sendMail({
-      from: `"School Records" <${process.env.BREVO_EMAIL}>`,
-      to: email,
-      subject: "Verify Your Admin Email – School Records",
-      html: `
+
+    await emailApi.sendTransacEmail({
+  sender: {
+    email: process.env.BREVO_EMAIL,
+    name: "School Records"
+  },
+  to: [{ email }],
+  subject: "OTP Verification",
+  htmlContent:  `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
       <h2 style="color: #198754;">Email Verification</h2>
 
@@ -108,7 +112,62 @@ router.post("/signup", async (req, res) => {
       </p>
     </div>
   `
-    });
+});
+
+
+
+
+
+  //   await transporter.sendMail({
+  //     from: `"School Records" <${process.env.BREVO_EMAIL}>`,
+  //     to: email,
+  //     subject: "Verify Your Admin Email – School Records",
+  //     html: `
+  //     <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+  //     <h2 style="color: #198754;">Email Verification</h2>
+
+  //      <p>
+  //       Hello <strong>${name}</strong>,
+  //     </p>
+
+  //     <p>
+  //       We received a request to create or verify an <strong>Admin account</strong>
+  //       for the <strong>School Records</strong> system using this email address.
+  //     </p>
+
+  //      <p style="font-size: 14px; color: #555;">
+  //       <strong>Request time:</strong> ${requestTime}
+  //     </p>
+
+  //     <p>
+  //       Your 4-digit verification code is:
+  //     </p>
+
+  //     <h1 style="letter-spacing: 4px; color: #000;">
+  //       ${otp}
+  //     </h1>
+
+  //     <p>
+  //       This code is valid for <strong>5 minutes</strong>.
+  //     </p>
+
+  //     <p>
+  //       <strong>If you did not request this verification,</strong>
+  //       you can safely ignore this email. No changes will be made to your account.
+  //     </p>
+
+  //     <p style="margin-top: 24px; font-size: 14px; color: #666;">
+  //       For your security, please do not share this code with anyone.
+  //     </p>
+
+  //     <hr style="margin: 24px 0;">
+
+  //     <p style="font-size: 13px; color: #444242;">
+  //       This is an automated message from the School Records system.
+  //     </p>
+  //   </div>
+  // `
+  //   });
 
     // 🔑 redirect instead of render
     return res.redirect(`/admin/verify?email=${email}`);
@@ -189,12 +248,29 @@ router.post("/resend-otp",noCache, async (req, res) => {
   owner.otpExpires = Date.now() + 5 * 60 * 1000;
   await owner.save();
 
-  await transporter.sendMail({
-    from: `"School Records" <${process.env.BREVO_EMAIL}>`,
-    to: email,
-    subject: "New OTP – School Records",
-    html: `<h1>${otp}</h1><p>Valid for 5 minutes</p>`
-  });
+
+
+
+  await emailApi.sendTransacEmail({
+  sender: {
+    email: process.env.BREVO_EMAIL,
+    name: "School Records"
+  },
+  to: [{ email }],
+  subject: "New OTP for SChool Verification",
+  htmlContent: `<h1>${otp}</h1><p>Valid for 5 minutes</p>`
+});
+
+
+
+
+
+  // await transporter.sendMail({
+  //   from: `"School Records" <${process.env.BREVO_EMAIL}>`,
+  //   to: email,
+  //   subject: "New OTP – School Records",
+  //   html: `<h1>${otp}</h1><p>Valid for 5 minutes</p>`
+  // });
 
   req.flash("success", "New OTP sent to your email");
   return res.redirect(`/admin/verify?email=${email}`);
