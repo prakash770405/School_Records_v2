@@ -1,17 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const cloudinary = require('../config/cloudinary'); 
 const upload = require("../config/multer");
 const auth = require("../middlewares/auth");
 const noCache = require("../middlewares/noCache");
 const { validateStudent } = require('../middlewares/validatestudent');
 const Student = require('../models/student');
 
-
 router.use(auth, noCache);
-
-
-
-
 
 router.get("/newdata", auth,noCache, validateStudent, (req, res) => {
   res.render("form.ejs", { isLoggedIn: req.isLoggedIn, showSearch: false });
