@@ -10,8 +10,8 @@ A multi-role Express and MongoDB application for managing a student database. Th
 - **Data Validation:** Robust input validation using **Joi** to ensure data integrity.
 - **Authentication:** Secure password handling with **Bcrypt** and authentication via **JSON Web Tokens (JWT)**. Includes **OTP-based Email Verification** for Admin accounts.
 - **Student Authentication:** Students can create their own passwords and log in to a dedicated dashboard.
-- **Email Integration:** Uses **Nodemailer** for email communication capabilities.
-- **Date Management:** Precise date handling using **Luxon**.
+- **Email Integration:** Uses **Sib-api-v3-sdk** for email communication capabilities on render.
+- **Date Management:** Using inbuilt date handling function.
 
 ### Technical Features
 - **Server-Side Rendering:** Dynamically renders HTML with data from the database using EJS templates.
@@ -27,7 +27,7 @@ A multi-role Express and MongoDB application for managing a student database. Th
 - Cloudinary & Multer (Media storage)
 - Joi (Validation)
 - JSON Web Token (Authentication)
-- Nodemailer (Emailing)
+- Sib-api-v3-sdk(Emailing)
 
 ### Dependencies
 
@@ -44,13 +44,12 @@ A multi-role Express and MongoDB application for managing a student database. Th
 | `express-session`        | `^1.18.2`| Simple session middleware for Express.     |
 | `joi`                    | `^18.0.2`| Object schema description language and validator. |
 | `jsonwebtoken`           | `^9.0.3` | JSON Web Token implementation.             |
-| `luxon`                  | `^3.7.2` | Library for working with dates and times.  |
 | `method-override`        | `^3.0.0` | Lets you use HTTP verbs like PUT or DELETE. |
 | `mongodb`                | `^7.0.0` | The official MongoDB driver for Node.js.   |
 | `mongoose`               | `^9.0.2` | MongoDB object modeling tool.              |
 | `multer`                 | `^2.0.2` | Middleware for handling `multipart/form-data`. |
 | `multer-storage-cloudinary`| `^4.0.0` | Cloudinary storage engine for Multer.      |
-| `nodemailer`             | `^7.0.12`| Send e-mails from Node.js.                 |
+| `sib-api-v3-sdk`             | `^8.5.0`| Send e-mails from Node.js and compatiable with render.    |
 
 
 ## Project structure (important files)
@@ -160,8 +159,8 @@ npm install
    CLOUDINARY_SECRET=...
    MONGO_URL=mongodb://127.0.0.1:27017/refresh
    JWT_SECRET=...
-   EMAIL_USER=...
-   EMAIL_PASS=...
+   BREVO_EMAIL=...
+   BREVO_API_KEY=...
    ```
 
 3. Ensure MongoDB is running.
@@ -172,7 +171,7 @@ npm install
 node app.js
 ```
 
-5. Open your browser at: `http://localhost:3000/` (Check console for actual port).
+5. Open your browser at: `http://localhost:8080/` (Check console for actual port).
 
 ## Notes & troubleshooting
 
@@ -186,7 +185,6 @@ node app.js
 - **UI/UX:** Enhance the user interface with a frontend framework like [Bootstrap](https://getbootstrap.com/) or [Tailwind CSS](https://tailwindcss.com/).
 - **Pagination:** Implement pagination for the student list to handle large datasets efficiently.
 - **Password Reset:** Add a "forgot password" feature for both admins and students.
-- **Role-Based Access Control (RBAC):** Implement more granular permissions for different user roles.
 - **Deployment:** Containerize the application using [Docker](https://www.docker.com/) for easier deployment.
 
 ## Contributing
@@ -203,56 +201,5 @@ Contributions are welcome! Please feel free to submit a pull request or open an 
 ## License
 
 This project uses the ISC license as indicated in `package.json`.
-
-```
-Refresh
-├─ app.js
-├─ config
-│  ├─ cloudinary.js
-│  ├─ email.js
-│  └─ multer.js
-├─ middlewares
-│  ├─ auth.js
-│  ├─ checkLogin.js
-│  ├─ detectStudent.js
-│  ├─ noCache.js
-│  ├─ studentAuth.js
-│  └─ validatestudent.js
-├─ models
-│  ├─ owner.js
-│  ├─ student.js
-│  └─ studentAuth.js
-├─ package-lock.json
-├─ package.json
-├─ public
-│  └─ css
-│     └─ index.css
-├─ README.md
-├─ routes
-│  ├─ admin.routes.js
-│  ├─ index.routes.js
-│  ├─ student.routes.js
-│  ├─ studentAuth.routes.js
-│  └─ subject.routes.js
-├─ schema.js
-└─ views
-   ├─ addsubject.ejs
-   ├─ editform.ejs
-   ├─ error.ejs
-   ├─ form.ejs
-   ├─ Includes
-   │  ├─ flash.ejs
-   │  ├─ footer.ejs
-   │  ├─ header.ejs
-   │  └─ navbar.ejs
-   ├─ index.ejs
-   ├─ Loginform.ejs
-   ├─ signupform.ejs
-   ├─ student
-   │  ├─ createPassword.ejs
-   │  ├─ dashboard.ejs
-   │  └─ login.ejs
-   ├─ verify.ejs
-   └─ viewdetail.ejs
 
 ```
