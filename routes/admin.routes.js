@@ -60,6 +60,7 @@ router.post("/signup", async (req, res) => {
     });
 
     await transporter.sendMail({
+      from: `"School Records" <${process.env.BREVO_EMAIL}>`,
       to: email,
       subject: "Verify Your Admin Email – School Records",
       html: `
@@ -189,6 +190,7 @@ router.post("/resend-otp",noCache, async (req, res) => {
   await owner.save();
 
   await transporter.sendMail({
+    from: `"School Records" <${process.env.BREVO_EMAIL}>`,
     to: email,
     subject: "New OTP – School Records",
     html: `<h1>${otp}</h1><p>Valid for 5 minutes</p>`
