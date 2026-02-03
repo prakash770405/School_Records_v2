@@ -115,22 +115,11 @@ h1{
   background: transparent;
 }
 
-
-
-
-
-
-
-
 /* ===== Pill Hover Effect ===== */
 .glass-dropdown .dropdown-item.rounded-pill:hover {
   background-color:#a1afa8 !important;
   color: #fff !important;
 }
-
-
-
-
 
 /* ===== Dropdown Animation ===== */
 .animate-dropdown {
@@ -323,4 +312,45 @@ h1{
 
 .flash-pill {
   backdrop-filter: blur(6px);
+}
+
+
+/* ===== Solid Login Dropdown Fix ===== */
+.login-dropdown {
+  background-color: #ffffff !important;   /* solid white */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* Dropdown items */
+.login-dropdown .dropdown-item {
+  color: #14532d !important; /* dark green */
+  font-weight: 600;
+  padding: 10px 16px;
+}
+
+/* Hover effect */
+.login-dropdown .dropdown-item:hover {
+  background-color: #e9f5ee;
+  color: #198754 !important;
+}
+
+/* Icons inside dropdown */
+.login-dropdown i {
+  color: #198754;
+}
+
+
+@media (max-width: 576px) {
+  .footer-mobile-row h6 {
+    font-size: 0.95rem;
+  }
+
+  .footer-mobile-row a {
+    font-size: 0.85rem;
+  }
 }

@@ -47,8 +47,10 @@ router.post("/signup", async (req, res) => {
     });
 
     await owner.save();
+
+    const Time = Date.now();
     
-    const requestTime = new Date().toLocaleString("en-IN", {
+    const requestTime = new Date(Time).toLocaleString("en-IN", {
       year: "numeric",
       month: "long",
       day: "2-digit",
@@ -197,7 +199,7 @@ router.post("/resend-otp",noCache, async (req, res) => {
     name: "School Records"
   },
   to: [{ email }],
-  subject: "New OTP for SChool Verification",
+  subject: "New OTP for School Verification",
   htmlContent: `<h1>${otp}</h1><p>Valid for 5 minutes</p>`
 });
 
@@ -220,9 +222,14 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const owner = await Owner.findOne({ email });
 
-    if (!owner || !(await owner.comparePassword(password)) || !owner.isVerified) {
+    if (!(await owner.comparePassword(password)) || !owner.isVerified) {
       req.flash("error", "Invalid email or password");
       return res.redirect("/admin/login");
+    }
+
+    if(!owner){
+       req.flash("error", "Your email is not registerd !! Please Signup");
+      return res.redirect("/admin/signup");
     }
 
     const token = owner.generateToken();
@@ -236,7 +243,7 @@ router.post("/login", async (req, res) => {
     req.flash("success", "Welcome to School Records");
     return res.redirect("/");
   } catch (err) {
-    req.flash("error", "Invalid email or password");
+    req.flash("error", "Account Not Found!! Please signup");
     return res.redirect("/admin/login");
   }
 });
@@ -268,7 +275,7 @@ router.delete("/:adminId/delete", auth, noCache, async (req, res) => {
   "Pragma": "no-cache",
   "Expires": "0"
 });
-  req.flash("success", "Admin deleted successfully");
+  req.flash("success", "Admin deleted successfully!! Please Signup");
   res.redirect("/admin/login");
 });
 
